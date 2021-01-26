@@ -12,13 +12,6 @@ Training images locate in `./data/images/`
 ### Step 2: Open [Colab notebook]
 - open tf_api_training.ipynb on colab to run it.
 
-
-## How to run inference on frozen TensorFlow graph
-
-Requirements:
-- `frozen_inference_graph.pb` Frozen TensorFlow object detection model downloaded from Colab after training. 
-- `label_map.pbtxt` File used to map correct name for predicted class index downloaded from Colab after training.
-
 Generating xml_to_csv
 
 convert all xml anntation files to csv using python file.
@@ -43,37 +36,24 @@ Training the model model_main in objection detection models cloned from github/t
     --num_eval_steps={num_eval_steps}
 
 ```
-# [How to run TensorFlow object detection model faster with Intel Graphics](https://www.dlology.com/blog/how-to-run-tensorflow-object-detection-model-faster-with-intel-graphics/) | DLology Blog
+----->Exporting inference graph
 
-## How to deploy the trained custom object detection model with OpenVINO
+Using the check point index and data file created in trained_checkpoint_prefix folder will take the latest check point file.
+This will create a frozen_infernce_graph.pb file which we use for object detection classifier.
 
-Requirements:
-- Frozen TensorFlow object detection model. i.e. `frozen_inference_graph.pb` downloaded from Colab after training.
-- The modified pipeline config file used for training. Also downloaded from Colab after training.
-
-You can also opt to download my [copy](https://github.com/Tony607/object_detection_demo/releases/download/V0.1/checkpoint.zip) of those files from the GitHub Release page.
-
-Run the following Jupyter notebook locally and follow the instructions in side.
-```
-deploy/openvino_convert_tf_object_detection.ipynb
-```
-## Run the benchmark
-
-Examples
-
-Benchmark SSD mobileNet V2 on GPU with FP16 quantized weights.
-```
-cd ./deploy
-python openvino_inference_benchmark.py\
-     --model-dir ./models/ssd_mobilenet_v2_custom_trained/FP16\
-     --device GPU\
-     --data-type FP16\
-     --img ../test/15.jpg
-```
-TensorFlow benchmark on cpu
-```
-python local_inference_test.py\
-     --model ./models/frozen_inference_graph.pb\
-     --img ./test/15.jpg\
-     --cpu
-```
+!python /content/models/research/object_detection/export_inference_graph.py \
+    --input_type=image_tensor \
+    --pipeline_config_path={pipeline_fname} \
+    --output_directory={output_directory} \
+    --trained_checkpoint_prefix={last_model_path}
+    
+ ----->Testing for a image using the frozen_inference_graph.pb file 
+ 
+ Reading the image file using PIL library.
+ 
+ loading the model and running the tensorflow session on the image generates this output
+ 
+ --detection_boxes,detection_scores,detection_classes,num_detections
+ 
+ plotting this on the final image is the final result.
+ 
