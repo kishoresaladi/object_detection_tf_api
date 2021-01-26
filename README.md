@@ -37,6 +37,9 @@ Training the model model_main in objection detection models cloned from github/t
     --alsologtostderr \
     --num_train_steps={num_steps} \
     --num_eval_steps={num_eval_steps}
+    
+INFO:tensorflow:Loss for final step: 2.9815474.
+I0126 08:43:57.695652 139851922913152 estimator.py:371] Loss for final step: 2.9815474.
 
 ```
 ----->Exporting inference graph
